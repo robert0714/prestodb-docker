@@ -46,3 +46,18 @@ services:
    environment:
      - TZ=Asia/Taipei
      - spring.datasource.url=jdbc:postgresql://postgresql:5432/kong
+ airpal:
+   container_name: airpal
+   image: zhicwu/airpal
+   ports:
+     - "8081:8081"
+   depends_on:
+     - mysqldb
+   environment:
+     - TZ=Asia/Taipei
+     - MYSQL_HOST=mysqldb
+     - MYSQL_PORT=3306
+     - MYSQL_DB=ec
+     - MYSQL_USER=ecuser
+     - MYSQL_PASSWD=1qaz@WSX
+     - PRESTO_SERVER_URI=http://presto:8080 
