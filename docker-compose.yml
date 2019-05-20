@@ -1,0 +1,48 @@
+version: "3"
+services:
+ postgresql:
+   container_name: postgresql
+   restart: always
+   image: sameersbn/postgresql:10-1
+   volumes:
+     - $PWD/postgresql_data:/var/lib/postgresql:Z
+   environment:
+     - PG_PASSWORD=1qaz@WSX
+     - DB_USER=postgres
+     - DB_PASS=1qaz@WSX
+     - DB_NAME=kong
+     - DB_EXTENSION=pg_trgm
+     - TZ=Asia/Taipei
+   #    network_mode:  "host"
+   ports:
+     - "5432:5432"
+ mysqldb:
+    container_name: mysql
+    image: mysql/mysql-server:8.0.11-1.1.5
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    - $PWD/data/mysql:/var/lib/mysql
+    - $PWD/my55.cnf:/etc/my.cnf
+    - $PWD/temp_my.cnf.j2:/.my.cnf
+    environment:
+    - MYSQL_ROOT_PASSWORD=qazwsx
+    - MYSQL_DATABASE=ec
+    - MYSQL_USER=ecuser
+    - MYSQL_PASSWORD=qazwsx
+    - EXTRA_OPTS="--lower_case_table_names=1"
+    - TZ=Asia/Taipei
+#    network_mode:  "host"
+    ports: 
+     - "3306:3306"
+ presto:
+   container_name: presto
+   image: starburstdata/presto
+   volumes:
+     - $PWD/postgresql.properties:/etc/presto/catalog/postgresql.properties:Z
+   ports:
+     - "8080:8080"
+   depends_on:
+     - postgresql
+   environment:
+     - TZ=Asia/Taipei
+     - spring.datasource.url=jdbc:postgresql://postgresql:5432/kong
