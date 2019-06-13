@@ -1,0 +1,18 @@
+version: "3"
+services:
+  # https://javiermunhoz.com/blog/2018/03/23/ceph-rgw-s3-demo-container-technical-notes.html
+  ceph:
+    container_name: ceph
+    image: ceph/daemon
+    volumes:
+      - $PWD/ceph_data/ceph:/var/lib/ceph:Z
+      - $PWD/ceph_data/etc/ceph:/etc/ceph:Z
+    environment:
+      - TZ=Asia/Taipei
+      - CEPH_DEMO_UID=sandboxId
+      - CEPH_DEMO_ACCESS_KEY=sandboxAccessKey
+      - CEPH_DEMO_SECRET_KEY=sandboxSecretKey
+      - CEPH_DEMO_BUCKET=sandboxBucket
+      - MON_IP=0.0.0.0
+      - CEPH_PUBLIC_NETWORK=0.0.0.0/0
+  #   network_mode:  "host"
